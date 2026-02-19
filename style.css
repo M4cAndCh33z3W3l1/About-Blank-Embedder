@@ -1,41 +1,125 @@
+/* Core Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    background-color: #121212;
-    color: white;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
+    overflow: hidden;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
-.container {
+/* Glassmorphism Card */
+.glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    /* The line below often triggers 'unknown property' warnings but is valid */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px); 
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 50px;
     text-align: center;
-    background: #1e1e1e;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.7);
+    z-index: 10;
+    width: 420px;
+    transition: transform 0.3s ease;
 }
 
+.glass-card:hover {
+    transform: translateY(-5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+h1 { 
+    color: #fff; 
+    letter-spacing: 3px; 
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+p { 
+    color: rgba(255, 255, 255, 0.6); 
+    font-size: 0.85rem; 
+    margin-bottom: 35px; 
+}
+
+/* Input Area */
 input {
-    width: 80%;
-    padding: 10px;
-    margin: 20px 0;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
+    width: 100%;
+    padding: 14px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: #fff;
+    margin-bottom: 20px;
+    outline: none;
+    font-size: 14px;
+}
+
+input:focus {
+    border-color: #0070f3;
+    background: rgba(0, 0, 0, 0.5);
 }
 
 button {
-    padding: 10px 20px;
-    background-color: #0070f3;
-    color: white;
+    width: 100%;
+    padding: 14px;
+    background: #fff;
+    color: #000;
     border: none;
-    border-radius: 5px;
+    border-radius: 12px;
     cursor: pointer;
     font-weight: bold;
+    font-size: 15px;
+    transition: all 0.3s ease;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background: #0070f3;
+    color: #fff;
+    box-shadow: 0 0 20px rgba(0, 112, 243, 0.4);
+}
+
+/* Background Space Stars */
+.stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background: transparent url('https://s3-us-west-2.amazonaws.com') repeat;
+    opacity: 0.5;
+    animation: move-stars 200s linear infinite;
+}
+
+@keyframes move-stars {
+    from { background-position: 0 0; }
+    to { background-position: 10000px 5000px; }
+}
+
+/* Shooting Star */
+.shooting-stars {
+    position: absolute;
+    top: 20%;
+    left: 80%;
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(90deg, #fff, transparent);
+    animation: shoot 4s infinite ease-in;
+    opacity: 0;
+}
+
+@keyframes shoot {
+    0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 0; }
+    10% { opacity: 1; }
+    30% { transform: translateX(-500px) translateY(500px) rotate(-45deg); opacity: 0; }
+    100% { opacity: 0; }
 }
