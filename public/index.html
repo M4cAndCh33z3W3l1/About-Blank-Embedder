@@ -3,53 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Drive</title>
+    <title id="tabTitle">Google Drive</title>
+    <link id="tabIcon" rel="icon" href="https://ssl.gstatic.com">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="stars-container">
-        <div class="stars"></div>
-        <div class="stars2"></div>
-        <div class="shooting-stars"></div>
-    </div>
+<body onclick="resetIdleTimer()" onkeypress="resetIdleTimer()">
+    <div class="stars"></div>
 
-    <!-- PIN Screen -->
-    <div id="pinOverlay" class="full-center">
-        <div class="glass-card slide-up">
-            <h1 class="glow-text">SYSTEM LOCKED</h1>
-            <div class="input-group">
-                <input type="password" id="pinInput" placeholder="ENTER PIN" autocomplete="off">
-            </div>
-            <button class="yellow-btn" onclick="checkPin()">AUTHORIZE</button>
-        </div>
-    </div>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="nav-item" onclick="openWindow('unblock')">🌐<span>Proxy</span></div>
+        <div class="nav-item" onclick="openWindow('embedder')">🖼️<span>Embed</span></div>
+        <div class="nav-item" onclick="openWindow('settings')">⚙️<span>Settings</span></div>
+    </nav>
 
-    <!-- Main Content -->
-    <div id="mainContent" class="full-center" style="display: none;">
-        <button class="settings-icon" onclick="toggleSettings()">⚙️</button>
+    <!-- Main Desktop / Workstage -->
+    <main id="workstage">
+        <!-- Windows will be injected here -->
+    </main>
+
+    <!-- Ghost Mode PIN Overlay -->
+    <div id="lockScreen" class="overlay" style="display: flex;">
         <div class="glass-card">
-            <h1>EMBEDDER</h1>
-            <div class="input-group">
-                <input type="text" id="urlInput" placeholder="https://..." value="https://">
-            </div>
-            <button class="yellow-btn" onclick="launchBlank()">SECURE LAUNCH</button>
-        </div>
-    </div>
-
-    <!-- Settings Modal -->
-    <div id="settingsModal" class="modal-overlay" style="display: none;">
-        <div class="glass-card settings-card">
-            <h2>SETTINGS</h2>
-            <div class="setting-item">
-                <label>Emergency Key:</label>
-                <input type="text" id="panicKeyInput" placeholder="e.g. Escape" maxlength="10">
-            </div>
-            <div class="setting-item">
-                <label>Fake Tab Title:</label>
-                <input type="text" id="fakeTitleInput" placeholder="Google Drive">
-            </div>
-            <button class="yellow-btn" onclick="saveSettings()">SAVE</button>
-            <button class="close-text" onclick="toggleSettings()">Close</button>
+            <h1>SYSTEM LOCKED</h1>
+            <input type="password" id="pinInput" placeholder="Enter PIN">
+            <button class="yellow-btn" onclick="checkPin()">UNLOCK</button>
         </div>
     </div>
 
