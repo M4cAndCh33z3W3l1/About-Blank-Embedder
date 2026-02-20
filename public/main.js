@@ -1,6 +1,6 @@
-// 1. CONFIG & CLOAKING
+// --- SECURE CONFIG (PIN is now unchangeable via UI) ---
+const SECRET_PIN = "1234"; 
 let config = JSON.parse(localStorage.getItem('sysConfig')) || {
-    pin: "1234",
     panicKey: "Escape",
     panicUrl: "https://classroom.google.com",
     tabTitle: "Google Drive",
@@ -8,10 +8,11 @@ let config = JSON.parse(localStorage.getItem('sysConfig')) || {
     idleTime: 5
 };
 
+// Apply Tab Cloak
 document.title = config.tabTitle;
 document.getElementById('tabIcon').href = config.tabIcon;
 
-// 2. GHOST MODE (INACTIVITY)
+// --- GHOST MODE ---
 let idleTimer;
 const resetIdleTimer = () => {
     clearTimeout(idleTimer);
@@ -21,105 +22,125 @@ const resetIdleTimer = () => {
 };
 resetIdleTimer();
 
-// 3. PIN CHECK
 function checkPin() {
-    if (document.getElementById('pinInput').value === config.pin) {
+    if (document.getElementById('pinInput').value === SECRET_PIN) {
         document.getElementById('lockScreen').style.display = "none";
         resetIdleTimer();
     } else { alert("ACCESS DENIED"); }
 }
 
-// 4. WINDOW MANAGER (THE "DESKTOP" LOGIC)
+// --- WINDOW & TASKBAR MANAGER ---
 function openWindow(type) {
-    // Prevent duplicate windows
-    if (document.getElementById(`win-${type}`)) return;
+    const existing = document.getElementById(`win-${type}`);
+    
+    // If window exists, just bring to front and show it
+    if (existing) {
+        existing.style.display = "block";
+        existing.classList.remove('minimized');
+        bringToFront(existing);
+        return;
+    }
 
+    // Create Window
     const win = document.createElement('div');
     win.id = `win-${type}`;
-    win.className = 'window draggable';
-    win.style.top = '100px';
-    win.style.left = '150px';
+    win.className = 'window animate-pop';
+    win.style.top = '15%';
+    win.style.left = '30%';
 
     let content = '';
     if (type === 'unblock') {
-        content = `
-            <h2>Proxy Unblocker</h2>
-            <input type="text" id="proxyInput" placeholder="Search DuckDuckGo or enter URL...">
-            <button class="yellow-btn" onclick="launchProxy()">LAUNCH PROXY</button>`;
+        content = `<h2>Proxy Unblocker</h2><input type="text" id="proxyInput" placeholder="Search or URL..."><button class="yellow-btn glow" onclick="launchProxy()">LAUNCH PROXY</button>`;
     } else if (type === 'embedder') {
-        content = `
-            <h2>about:blank Embedder</h2>
-            <input type="text" id="embedInput" placeholder="https://example.com" value="https://">
-            <button class="yellow-btn" onclick="launchEmbed()">LAUNCH CLOAK</button>`;
+        content = `<h2>about:blank Embedder</h2><input type="text" id="embedInput" placeholder="https://..." value="https://"><button class="yellow-btn glow" onclick="launchEmbed()">LAUNCH CLOAK</button>`;
     } else if (type === 'settings') {
         content = `
-            <div style="max-height:300px; overflow-y:auto; padding-right:10px;">
-                <label>PIN</label><input type="text" id="s_pin" value="${config.pin}">
+            <h2>System Settings</h2>
+            <div class="settings-scroll">
                 <label>Panic Key</label><input type="text" id="s_key" value="${config.panicKey}">
                 <label>Panic URL</label><input type="text" id="s_purl" value="${config.panicUrl}">
                 <label>Tab Title</label><input type="text" id="s_title" value="${config.tabTitle}">
-                <label>Tab Icon (URL)</label><input type="text" id="s_icon" value="${config.tabIcon}">
-                <label>Idle Time (Min)</label><input type="number" id="s_idle" value="${config.idleTime}">
-                <button class="yellow-btn" onclick="saveSettings()">SAVE ALL</button>
+                <label>Tab Icon URL</label><input type="text" id="s_icon" value="${config.tabIcon}">
+                <button class="yellow-btn" onclick="saveSettings()">APPLY SYSTEM UPDATES</button>
             </div>`;
     }
 
     win.innerHTML = `
         <div class="window-header" onmousedown="dragElement(this.parentElement)">
-            <span class="window-title">${type.toUpperCase()}</span>
+            <span class="window-title-text">${type.toUpperCase()}</span>
             <div class="window-controls">
-                <span onclick="this.parentElement.parentElement.parentElement.classList.toggle('minimized')">−</span>
-                <span onclick="this.parentElement.parentElement.parentElement.classList.toggle('fullscreen')">▢</span>
-                <span onclick="this.parentElement.parentElement.parentElement.remove()" style="color:#ff5555">×</span>
+                <div class="ctrl min" onclick="toggleMin('${type}')"></div>
+                <div class="ctrl max" onclick="this.parentElement.parentElement.parentElement.classList.toggle('fullscreen')"></div>
+                <div class="ctrl close" onclick="closeWindow('${type}')"></div>
             </div>
         </div>
         <div class="window-body">${content}</div>
     `;
 
     document.getElementById('workstage').appendChild(win);
+    addTaskbarIcon(type);
+    bringToFront(win);
 }
 
-// 5. DRAG LOGIC (The "Chrome Window" feel)
+function addTaskbarIcon(type) {
+    const bar = document.getElementById('taskbar');
+    const icon = document.createElement('div');
+    icon.id = `task-${type}`;
+    icon.className = 'task-item';
+    icon.innerHTML = `<img src="${getIconPath(type)}">`;
+    icon.onclick = () => openWindow(type);
+    bar.appendChild(icon);
+}
+
+function getIconPath(type) {
+    if(type === 'unblock') return "https://cdn-icons-png.flaticon.com";
+    if(type === 'settings') return "https://cdn-icons-png.flaticon.com";
+    return "https://upload.wikimedia.org";
+}
+
+function closeWindow(type) {
+    document.getElementById(`win-${type}`).remove();
+    document.getElementById(`task-${type}`).remove();
+}
+
+function toggleMin(type) {
+    const win = document.getElementById(`win-${type}`);
+    win.style.display = "none";
+}
+
+function bringToFront(elm) {
+    document.querySelectorAll('.window').forEach(w => w.style.zIndex = "10");
+    elm.style.zIndex = "100";
+}
+
+// --- SMOOTH DRAG ENGINE ---
 function dragElement(elmnt) {
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
     elmnt.onmousedown = dragMouseDown;
 
     function dragMouseDown(e) {
-        if (e.target.closest('.window-controls') || e.target.tagName === 'INPUT') return;
-        e.preventDefault();
+        if (e.target.className.includes('ctrl') || e.target.tagName === 'INPUT') return;
         pos3 = e.clientX;
         pos4 = e.clientY;
-        document.onmouseup = closeDragElement;
-        document.onmousemove = elementDrag;
-        // Bring to front
-        document.querySelectorAll('.window').forEach(w => w.style.zIndex = "10");
-        elmnt.style.zIndex = "100";
-    }
-
-    function elementDrag(e) {
-        e.preventDefault();
-        pos1 = pos3 - e.clientX;
-        pos2 = pos4 - e.clientY;
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-    }
-
-    function closeDragElement() {
-        document.onmouseup = null;
-        document.onmousemove = null;
+        document.onmouseup = () => { document.onmouseup = null; document.onmousemove = null; };
+        document.onmousemove = (e) => {
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+            elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        };
+        bringToFront(elmnt);
     }
 }
 
-// 6. SYSTEM ACTIONS
+// --- UTILS ---
 function saveSettings() {
-    config.pin = document.getElementById('s_pin').value;
     config.panicKey = document.getElementById('s_key').value;
     config.panicUrl = document.getElementById('s_purl').value;
     config.tabTitle = document.getElementById('s_title').value;
     config.tabIcon = document.getElementById('s_icon').value;
-    config.idleTime = parseInt(document.getElementById('s_idle').value);
     localStorage.setItem('sysConfig', JSON.stringify(config));
     location.reload();
 }
@@ -130,7 +151,6 @@ async function launchProxy() {
     if (!input.includes('.') || input.includes(' ')) {
         url = "https://duckduckgo.com" + encodeURIComponent(input);
     } else if (!input.startsWith('http')) { url = "https://" + input; }
-    
     const win = window.open('about:blank', '_blank');
     const encoded = window.location.origin + "/uv/service/" + btoa(url);
     win.document.body.innerHTML = `<iframe src="${encoded}" style="position:fixed;inset:0;width:100%;height:100%;border:none;"></iframe>`;

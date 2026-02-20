@@ -135,3 +135,41 @@ input {
 
 .minimized .window-body { display: none; }
 .minimized { height: 45px !important; }
+/* Taskbar Logic */
+#taskbar {
+    position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
+    height: 60px; background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px; display: flex; align-items: center; padding: 0 15px; gap: 15px; z-index: 200;
+}
+
+.task-item img { width: 35px; cursor: pointer; transition: 0.3s; filter: drop-shadow(0 0 5px rgba(255,255,0,0.2)); }
+.task-item:hover img { transform: translateY(-5px) scale(1.1); filter: drop-shadow(0 0 10px #ffff00); }
+
+/* Spacy Typography & Glow */
+h2 { font-family: 'Orbitron', sans-serif; letter-spacing: 4px; color: #fff; text-shadow: 0 0 15px #ffff00; margin-bottom: 20px; }
+
+.yellow-btn.glow { box-shadow: 0 0 20px rgba(255, 255, 0, 0.4); text-transform: uppercase; letter-spacing: 2px; }
+
+/* Mac-style Window Controls */
+.window-controls { display: flex; gap: 8px; }
+.ctrl { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; }
+.close { background: #ff5f56; }
+.min { background: #ffbd2e; }
+.max { background: #27c93f; }
+
+/* Pop Animation */
+.animate-pop { animation: pop 0.25s cubic-bezier(0.2, 1, 0.2, 1); }
+@keyframes pop { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+h1, h2, .glow-text {
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    color: #fff;
+    text-shadow: 0 0 15px #ffff00; /* This creates the yellow glow */
+}
+
+.yellow-btn.glow {
+    box-shadow: 0 0 15px rgba(255, 255, 0, 0.4);
+    font-family: 'Orbitron', sans-serif;
+}
