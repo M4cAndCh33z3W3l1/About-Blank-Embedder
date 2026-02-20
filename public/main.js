@@ -1,5 +1,5 @@
 // --- SECURE CONFIG ---
-const SECRET_PIN = "1234"; // CHANGE THIS TO YOUR SECRET PIN
+const SECRET_PIN = "1234"; 
 let config = JSON.parse(localStorage.getItem('sysConfig')) || {
     panicKey: "Escape", 
     panicUrl: "https://classroom.google.com",
@@ -10,7 +10,8 @@ let config = JSON.parse(localStorage.getItem('sysConfig')) || {
 
 // Apply Tab Cloak Immediately
 document.title = config.tabTitle;
-document.getElementById('tabIcon').href = config.tabIcon;
+const iconEl = document.getElementById('tabIcon');
+if (iconEl) iconEl.href = config.tabIcon;
 
 // 1. LIVE TIME (Bottom Left Corner)
 setInterval(() => {
@@ -25,7 +26,8 @@ let idleTimer;
 const resetIdleTimer = () => {
     clearTimeout(idleTimer);
     idleTimer = setTimeout(() => {
-        document.getElementById('lockScreen').style.display = "flex";
+        const lock = document.getElementById('lockScreen');
+        if (lock) lock.style.display = "flex";
     }, config.idleTime * 60 * 1000);
 };
 resetIdleTimer();
@@ -33,15 +35,24 @@ resetIdleTimer();
 // 3. PIN CHECK (Terminal Style)
 function checkPin() {
     const input = document.getElementById('pinInput');
+    const lock = document.getElementById('lockScreen');
+    
+    if (!input) return; // Safety check
+
     if (input.value === SECRET_PIN) {
-        document.getElementById('lockScreen').style.display = "none";
+        if (lock) lock.style.display = "none";
         resetIdleTimer();
         input.value = ""; 
+        input.placeholder = "ENTER PIN";
     } else {
         input.value = "";
         input.placeholder = "ACCESS_DENIED";
+        // Visual feedback for wrong PIN
         input.style.borderBottom = "2px solid #ff5555";
-        setTimeout(() => { input.style.borderBottom = "none"; input.placeholder = "ENTER PIN"; }, 1000);
+        setTimeout(() => { 
+            input.style.borderBottom = "none"; 
+            input.placeholder = "ENTER PIN"; 
+        }, 1000);
     }
 }
 
@@ -129,7 +140,6 @@ function dragElement(elmnt) {
 
     function dragMouseDown(e) {
         if (e.target.tagName === 'INPUT' || e.target.className.includes('dot') || e.target.tagName === 'BUTTON') return;
-        e.preventDefault();
         pos3 = e.clientX;
         pos4 = e.clientY;
         document.onmouseup = closeDragElement;
@@ -138,7 +148,6 @@ function dragElement(elmnt) {
     }
 
     function elementDrag(e) {
-        e.preventDefault();
         pos1 = pos3 - e.clientX;
         pos2 = pos4 - e.clientY;
         pos3 = e.clientX;
@@ -178,15 +187,14 @@ async function launchProxy() {
         url = "https://" + input;
     }
     const win = window.open('about:blank', '_blank');
-    // Ensure Ultraviolet files are in /uv/ folder on Vercel
     const encoded = window.location.origin + "/uv/service/" + btoa(url); 
-    win.document.body.innerHTML = `<iframe src="${encoded}" style="position:fixed;inset:0;width:100%;height:100%;border:none;margin:0;padding:0;overflow:hidden;"></iframe>`;
+    if (win) win.document.body.innerHTML = `<iframe src="${encoded}" style="position:fixed;inset:0;width:100%;height:100%;border:none;margin:0;padding:0;overflow:hidden;"></iframe>`;
 }
 
 async function launchEmbed() {
     const url = document.getElementById('embedInput').value;
     const win = window.open('about:blank', '_blank');
-    win.document.body.innerHTML = `<iframe src="${url}" style="position:fixed;inset:0;width:100%;height:100%;border:none;margin:0;padding:0;overflow:hidden;"></iframe>`;
+    if (win) win.document.body.innerHTML = `<iframe src="${url}" style="position:fixed;inset:0;width:100%;height:100%;border:none;margin:0;padding:0;overflow:hidden;"></iframe>`;
 }
 
 // 7. PANIC KEY

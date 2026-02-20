@@ -1,68 +1,72 @@
-/* Fix the floating void */
+/* 1. CORE SYSTEM */
+:root { --glow: #ffff00; --bg: #000; --panel: rgba(10, 10, 10, 0.95); }
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Orbitron', sans-serif; }
+
+body { background: var(--bg); height: 100vh; width: 100vw; display: flex; overflow: hidden; color: white; }
+
+/* 2. THE L-BAR (Sidebar + Toolbar Connection) */
+.sidebar {
+    width: 75px; height: calc(100vh - 50px); background: var(--panel);
+    border-right: 1px solid #222; display: flex; flex-direction: column; align-items: center; padding-top: 25px; z-index: 100;
+}
+#toolbar {
+    position: fixed; bottom: 0; left: 0; width: 100vw; height: 50px;
+    background: var(--panel); border-top: 1px solid #222; display: flex; align-items: center; z-index: 101;
+}
+#start-corner {
+    width: 75px; height: 50px; background: #151515; border-right: 1px solid #222;
+    display: flex; justify-content: center; align-items: center; color: var(--glow); font-size: 10px;
+}
+
+/* 3. ICONS (Bare & Glowing) */
+.nav-item { margin-bottom: 35px; cursor: pointer; transition: 0.3s; }
+.nav-item img, .task-icon { 
+    width: 30px; height: 30px; 
+    filter: brightness(0) invert(1) drop-shadow(0 0 5px var(--glow)); 
+}
+.nav-item:hover img { transform: scale(1.2); filter: brightness(1) drop-shadow(0 0 10px var(--glow)); }
+
+/* 4. THE TERMINAL LOCK WINDOW (No more random void) */
 .overlay {
-    background: radial-gradient(circle, #0a0a0a 0%, #000 100%);
-    z-index: 9999;
+    position: fixed; inset: 0; background: radial-gradient(circle, #0a0a0a 0%, #000 100%);
+    display: flex; justify-content: center; align-items: center; z-index: 9999;
 }
-
-/* The Terminal Window */
 .terminal-window {
-    width: 450px;
-    padding: 0 !important; /* Header takes care of padding */
-    border: 1px solid rgba(255, 255, 0, 0.2);
-    box-shadow: 0 0 40px rgba(0, 0, 0, 1), 0 0 20px rgba(255, 255, 0, 0.05);
+    width: 420px; background: #080808; border: 1px solid rgba(255, 255, 0, 0.2);
+    border-radius: 10px; box-shadow: 0 0 50px rgba(0,0,0,1); overflow: hidden;
 }
-
 .terminal-header {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 10px 15px;
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 0, 0.1);
+    background: rgba(255, 255, 255, 0.05); padding: 10px 15px;
+    display: flex; align-items: center; border-bottom: 1px solid #222;
 }
+.terminal-body { padding: 40px 30px; text-align: center; }
 
-.terminal-title {
-    font-size: 9px;
-    color: #444;
-    margin-left: 15px;
-    letter-spacing: 2px;
-}
-
-.terminal-body { padding: 40px 30px; }
-
-/* FIXING THE AZZ INPUT */
+/* 5. FIXING THE AZZ INPUT BOX */
 .input-container {
-    display: flex;
-    gap: 0; /* Joins them together */
-    margin-top: 25px;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 0, 0.3);
+    display: flex; margin-top: 30px; border: 1px solid rgba(255, 255, 0, 0.3);
+    border-radius: 8px; overflow: hidden;
 }
-
 #pinInput {
-    flex: 1;
-    background: #000;
-    border: none !important; /* Kills the default look */
-    padding: 15px;
-    color: var(--glow);
-    font-family: 'Orbitron';
-    font-size: 0.9rem;
-    letter-spacing: 4px;
-    margin: 0 !important;
+    flex: 1; background: #000; border: none; padding: 15px;
+    color: var(--glow); font-size: 1rem; letter-spacing: 4px; outline: none;
 }
-
-#pinInput::placeholder { color: #333; letter-spacing: 1px; font-size: 10px; }
-
 .yellow-btn.glow {
-    width: auto;
-    padding: 0 25px;
-    border-radius: 0; /* Makes it flush with input */
-    font-size: 11px;
+    background: var(--glow); color: #000; border: none; padding: 0 20px;
+    font-weight: 900; font-size: 10px; cursor: pointer; text-transform: uppercase;
 }
 
-.status-text {
-    font-size: 10px;
-    color: #666;
-    margin-top: 10px;
-    text-transform: uppercase;
+/* 6. DESKTOP WINDOWS */
+.window {
+    position: absolute; min-width: 350px; background: rgba(15, 15, 15, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px;
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.8); z-index: 10;
 }
+.window-header { background: rgba(255,255,255,0.05); padding: 10px; display: flex; justify-content: space-between; cursor: move; }
+
+/* 7. TEXT GLOW */
+.glow-text { color: #fff; text-shadow: 0 0 15px var(--glow); letter-spacing: 4px; font-size: 1.2rem; }
+
+/* Animations */
+.animate-pop { animation: pop 0.3s cubic-bezier(0.2, 1, 0.2, 1); }
+@keyframes pop { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
