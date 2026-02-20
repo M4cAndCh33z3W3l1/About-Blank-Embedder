@@ -1,52 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com" rel="stylesheet">
-    <title id="tabTitle">Loading...</title>
-    <link id="tabIcon" rel="icon" href="">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body onclick="resetIdleTimer()" onkeypress="resetIdleTimer()">
-    <div class="stars"></div>
-    <div class="stars2"></div>
-
-    <!-- Sidebar (Vertical L) -->
-    <nav class="sidebar">
-        <div class="nav-item" onclick="openWindow('unblock')">
-            <img src="https://cdn-icons-png.flaticon.com/512/4542/4542005.png" alt="Proxy">
+<!-- Replace your current lockScreen div with this -->
+<div id="lockScreen" class="overlay">
+    <div class="glass-card animate-pop terminal-window">
+        <div class="terminal-header">
+            <span class="dot red"></span>
+            <span class="dot yel"></span>
+            <span class="dot grn"></span>
+            <span class="terminal-title">SECURITY_ENFORCEMENT_MODULE</span>
         </div>
-        <div class="nav-item" onclick="openWindow('embedder')">
-            <img src="https://upload.wikimedia.org" alt="Embed">
-        </div>
-        <div class="nav-item" onclick="openWindow('settings')">
-            <img src="https://cdn-icons-png.flaticon.com" alt="Settings">
-        </div>
-    </nav>
-
-    <!-- Main Desktop Workspace -->
-    <main id="workstage"></main>
-
-    <!-- Toolbar (Horizontal L) -->
-    <div id="toolbar">
-        <div id="start-corner">
-            <span id="live-time">00:00</span>
-        </div>
-        <div id="taskbar-icons"></div>
-    </div>
-
-    <!-- PIN LOCK OVERLAY (Fixes the stacking bug) -->
-    <div id="lockScreen" class="overlay">
-        <div class="glass-card animate-pop">
+        <div class="terminal-body">
             <h1 class="glow-text">SYSTEM LOCKED</h1>
-            <input type="password" id="pinInput" placeholder="ENTER PIN" autocomplete="off">
-            <button class="yellow-btn glow" onclick="checkPin()">AUTHORIZE</button>
+            <p class="status-text">Unauthorized access detected. Input PIN to proceed.</p>
+            <div class="input-container">
+                <input type="password" id="pinInput" placeholder="ENTER PIN" autocomplete="off">
+                <button class="yellow-btn glow" onclick="checkPin()">AUTHORIZE</button>
+            </div>
         </div>
     </div>
-
-    <script src="/uv/uv.bundle.js"></script>
-    <script src="/uv/uv.config.js"></script>
-    <script src="main.js"></script>
-</body>
-</html>
+</div>

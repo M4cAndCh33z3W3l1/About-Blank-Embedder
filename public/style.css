@@ -1,41 +1,68 @@
-:root { --glow: #ffff00; --panel: rgba(10, 10, 10, 0.95); }
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Orbitron', sans-serif; }
-body { background: #000; height: 100vh; width: 100vw; display: flex; overflow: hidden; }
-
-/* The L-Bar Connection */
-.sidebar {
-    width: 70px; height: calc(100vh - 50px); background: var(--panel);
-    border-right: 1px solid #222; display: flex; flex-direction: column; align-items: center; padding-top: 25px; z-index: 100;
-}
-#toolbar {
-    position: fixed; bottom: 0; left: 0; width: 100vw; height: 50px;
-    background: var(--panel); border-top: 1px solid #222; display: flex; align-items: center; z-index: 101;
-}
-#start-corner {
-    width: 70px; height: 50px; background: #151515; border-right: 1px solid #222;
-    display: flex; justify-content: center; align-items: center;
-}
-#live-time { font-size: 10px; color: var(--glow); text-shadow: 0 0 5px var(--glow); }
-
-/* BARE ICONS (No Rings) */
-.nav-item { margin-bottom: 30px; cursor: pointer; transition: 0.3s; }
-.nav-item img { 
-    width: 28px; height: 28px; filter: brightness(0) invert(1) drop-shadow(0 0 5px var(--glow)); 
-}
-.nav-item:hover img { transform: scale(1.2); filter: brightness(1) drop-shadow(0 0 10px var(--glow)); }
-
-/* SPACEY WINDOWS */
-.window {
-    position: absolute; min-width: 320px; background: rgba(15, 15, 15, 0.9);
-    border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px;
-    backdrop-filter: blur(20px); resize: both; overflow: hidden; z-index: 10;
-}
-.window-header { background: rgba(255,255,255,0.05); padding: 10px; display: flex; justify-content: space-between; cursor: move; }
-
-/* FIXED OVERLAY */
+/* Fix the floating void */
 .overlay {
-    position: fixed; inset: 0; background: #000; z-index: 9999;
-    display: flex; justify-content: center; align-items: center;
+    background: radial-gradient(circle, #0a0a0a 0%, #000 100%);
+    z-index: 9999;
 }
-.glow-text { color: #fff; text-shadow: 0 0 15px var(--glow); letter-spacing: 5px; }
-.yellow-btn { background: var(--glow); color: #000; font-weight: 900; border: none; padding: 12px; border-radius: 6px; cursor: pointer; }
+
+/* The Terminal Window */
+.terminal-window {
+    width: 450px;
+    padding: 0 !important; /* Header takes care of padding */
+    border: 1px solid rgba(255, 255, 0, 0.2);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 1), 0 0 20px rgba(255, 255, 0, 0.05);
+}
+
+.terminal-header {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 0, 0.1);
+}
+
+.terminal-title {
+    font-size: 9px;
+    color: #444;
+    margin-left: 15px;
+    letter-spacing: 2px;
+}
+
+.terminal-body { padding: 40px 30px; }
+
+/* FIXING THE AZZ INPUT */
+.input-container {
+    display: flex;
+    gap: 0; /* Joins them together */
+    margin-top: 25px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 0, 0.3);
+}
+
+#pinInput {
+    flex: 1;
+    background: #000;
+    border: none !important; /* Kills the default look */
+    padding: 15px;
+    color: var(--glow);
+    font-family: 'Orbitron';
+    font-size: 0.9rem;
+    letter-spacing: 4px;
+    margin: 0 !important;
+}
+
+#pinInput::placeholder { color: #333; letter-spacing: 1px; font-size: 10px; }
+
+.yellow-btn.glow {
+    width: auto;
+    padding: 0 25px;
+    border-radius: 0; /* Makes it flush with input */
+    font-size: 11px;
+}
+
+.status-text {
+    font-size: 10px;
+    color: #666;
+    margin-top: 10px;
+    text-transform: uppercase;
+}
