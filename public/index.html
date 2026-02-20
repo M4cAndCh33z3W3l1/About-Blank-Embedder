@@ -17,3 +17,26 @@
         </div>
     </div>
 </div>
+    <!-- ... all your other HTML ... -->
+
+    <!-- PIN LOCK OVERLAY -->
+    <div id="lockScreen" class="overlay" style="display: flex; z-index: 9999;">
+        <div class="terminal-window">
+            <div class="terminal-body">
+                <h1 class="glow-text">SYSTEM LOCKED</h1>
+                <div class="input-container">
+                    <!-- ADD type="password" AND CORRECT ID -->
+                    <input type="password" id="pinInput" placeholder="ENTER PIN" autocomplete="off">
+                    <!-- ADD type="button" TO PREVENT REFRESH -->
+                    <button type="button" class="yellow-btn glow" onclick="checkPin()">AUTHORIZE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS AT THE VERY BOTTOM -->
+    <script src="/uv/uv.bundle.js"></script>
+    <script src="/uv/uv.config.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
