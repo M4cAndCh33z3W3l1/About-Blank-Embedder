@@ -105,3 +105,33 @@ input {
     align-items: center;
     z-index: 1000;
 }
+.window-header {
+    background: rgba(255,255,255,0.1);
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: move;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.window-controls span {
+    margin-left: 10px;
+    cursor: pointer;
+    font-family: monospace;
+    font-size: 18px;
+    opacity: 0.6;
+}
+
+.window-controls span:hover { opacity: 1; }
+
+.fullscreen {
+    width: 90vw !important;
+    height: 80vh !important;
+    top: 5vh !important;
+    left: 5vw !important;
+}
+
+.minimized .window-body { display: none; }
+.minimized { height: 45px !important; }
