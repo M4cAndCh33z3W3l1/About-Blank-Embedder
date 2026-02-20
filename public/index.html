@@ -12,35 +12,36 @@
     <div class="stars"></div>
     <div class="stars2"></div>
 
-    <!-- Sidebar (Vertical part of L) -->
+    <!-- Sidebar (Vertical L) -->
     <nav class="sidebar">
         <div class="nav-item" onclick="openWindow('unblock')">
-            <img src="https://cdn-icons-png.flaticon.com">
+            <img src="https://cdn-icons-png.flaticon.com/512/4542/4542005.png" alt="Proxy">
         </div>
         <div class="nav-item" onclick="openWindow('embedder')">
-            <img src="https://upload.wikimedia.org">
+            <img src="https://upload.wikimedia.org" alt="Embed">
         </div>
         <div class="nav-item" onclick="openWindow('settings')">
-            <img src="https://cdn-icons-png.flaticon.com">
+            <img src="https://cdn-icons-png.flaticon.com" alt="Settings">
         </div>
     </nav>
 
+    <!-- Main Desktop Workspace -->
     <main id="workstage"></main>
 
-    <!-- Bottom Toolbar (Horizontal part of L) -->
+    <!-- Toolbar (Horizontal L) -->
     <div id="toolbar">
-        <div id="start-corner" onclick="toggleStartMenu()">
+        <div id="start-corner">
             <span id="live-time">00:00</span>
         </div>
         <div id="taskbar-icons"></div>
     </div>
 
-    <!-- Lock Screen -->
+    <!-- PIN LOCK OVERLAY (Fixes the stacking bug) -->
     <div id="lockScreen" class="overlay">
-        <div class="glass-card">
-            <h1 class="glow-text">LOCKED</h1>
-            <input type="password" id="pinInput" placeholder="PIN">
-            <button class="yellow-btn glow" onclick="checkPin()">UNLOCK</button>
+        <div class="glass-card animate-pop">
+            <h1 class="glow-text">SYSTEM LOCKED</h1>
+            <input type="password" id="pinInput" placeholder="ENTER PIN" autocomplete="off">
+            <button class="yellow-btn glow" onclick="checkPin()">AUTHORIZE</button>
         </div>
     </div>
 

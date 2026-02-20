@@ -1,60 +1,41 @@
-:root { --glow: #ffff00; --bg: #050505; --panel: rgba(15, 15, 15, 0.9); }
+:root { --glow: #ffff00; --panel: rgba(10, 10, 10, 0.95); }
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Orbitron', sans-serif; }
+body { background: #000; height: 100vh; width: 100vw; display: flex; overflow: hidden; }
 
-body { background: var(--bg); height: 100vh; overflow: hidden; display: flex; color: white; }
-
-/* The "L" Bar Layout */
+/* The L-Bar Connection */
 .sidebar {
     width: 70px; height: calc(100vh - 50px); background: var(--panel);
-    border-right: 1px solid #222; display: flex; flex-direction: column; align-items: center; padding-top: 20px; z-index: 100;
+    border-right: 1px solid #222; display: flex; flex-direction: column; align-items: center; padding-top: 25px; z-index: 100;
 }
-
 #toolbar {
     position: fixed; bottom: 0; left: 0; width: 100vw; height: 50px;
     background: var(--panel); border-top: 1px solid #222; display: flex; align-items: center; z-index: 101;
 }
-
 #start-corner {
-    width: 70px; height: 50px; background: #111; border-right: 1px solid #222;
-    display: flex; justify-content: center; align-items: center; color: var(--glow); font-size: 10px;
+    width: 70px; height: 50px; background: #151515; border-right: 1px solid #222;
+    display: flex; justify-content: center; align-items: center;
 }
+#live-time { font-size: 10px; color: var(--glow); text-shadow: 0 0 5px var(--glow); }
 
-/* Icon Fixes */
+/* BARE ICONS (No Rings) */
 .nav-item { margin-bottom: 30px; cursor: pointer; transition: 0.3s; }
-.nav-item img, .task-icon { 
-    width: 30px; height: 30px; 
-    filter: brightness(0) invert(1) drop-shadow(0 0 5px var(--glow)); /* Forces them to show up */
+.nav-item img { 
+    width: 28px; height: 28px; filter: brightness(0) invert(1) drop-shadow(0 0 5px var(--glow)); 
 }
 .nav-item:hover img { transform: scale(1.2); filter: brightness(1) drop-shadow(0 0 10px var(--glow)); }
 
-/* Futuristic Window Styling */
+/* SPACEY WINDOWS */
 .window {
-    position: absolute; background: rgba(10, 10, 10, 0.85); 
-    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px;
-    box-shadow: 0 0 30px rgba(0,0,0,0.9); min-width: 350px; overflow: hidden;
+    position: absolute; min-width: 320px; background: rgba(15, 15, 15, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px;
+    backdrop-filter: blur(20px); resize: both; overflow: hidden; z-index: 10;
 }
+.window-header { background: rgba(255,255,255,0.05); padding: 10px; display: flex; justify-content: space-between; cursor: move; }
 
-.window-header { 
-    background: rgba(255,255,255,0.05); padding: 10px; 
-    display: flex; justify-content: space-between; align-items: center; cursor: move;
+/* FIXED OVERLAY */
+.overlay {
+    position: fixed; inset: 0; background: #000; z-index: 9999;
+    display: flex; justify-content: center; align-items: center;
 }
-
-.window-body { padding: 25px; }
-
-/* Inputs & Buttons */
-input { 
-    width: 100%; padding: 12px; background: #000; border: 1px solid #333; 
-    color: var(--glow); border-radius: 5px; margin-bottom: 10px; outline: none;
-}
-input:focus { border-color: var(--glow); box-shadow: 0 0 10px rgba(255,255,0,0.2); }
-
-.yellow-btn { 
-    width: 100%; padding: 12px; background: var(--glow); color: #000; 
-    font-weight: 900; border: none; border-radius: 5px; cursor: pointer; text-transform: uppercase;
-}
-
-/* Scrollbar for Settings */
-.settings-scroll { max-height: 300px; overflow-y: auto; padding-right: 10px; }
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+.glow-text { color: #fff; text-shadow: 0 0 15px var(--glow); letter-spacing: 5px; }
+.yellow-btn { background: var(--glow); color: #000; font-weight: 900; border: none; padding: 12px; border-radius: 6px; cursor: pointer; }
