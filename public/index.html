@@ -3,27 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="tabTitle">Google Drive</title>
-    <link id="tabIcon" rel="icon" href="https://ssl.gstatic.com">
+    <title id="tabTitle">Loading...</title>
+    <link id="tabIcon" rel="icon" href="">
     <link rel="stylesheet" href="style.css">
 </head>
 <body onclick="resetIdleTimer()" onkeypress="resetIdleTimer()">
     <div class="stars"></div>
 
-    <!-- Sidebar Navigation -->
     <nav class="sidebar">
-        <div class="nav-item" onclick="openWindow('unblock')">🌐<span>Proxy</span></div>
-        <div class="nav-item" onclick="openWindow('embedder')">🖼️<span>Embed</span></div>
-        <div class="nav-item" onclick="openWindow('settings')">⚙️<span>Settings</span></div>
+        <!-- Using your requested Flaticon & Wiki links -->
+        <div class="nav-item" onclick="openWindow('unblock')">
+            <img src="https://cdn-icons-png.flaticon.com/512/6565/6565893.png" alt="Proxy">
+            <span>Proxy</span>
+        </div>
+        <div class="nav-item" onclick="openWindow('embedder')">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/56/Chain_link_icon_slanted.png" alt="Embed">
+            <span>Embed</span>
+        </div>
+        <div class="nav-item" onclick="openWindow('settings')">
+            <img src="https://cdn-icons-png.flaticon.com/512/929/929577.png" alt="Settings">
+            <span>Settings</span>
+        </div>
     </nav>
 
-    <!-- Main Desktop / Workstage -->
-    <main id="workstage">
-        <!-- Windows will be injected here -->
-    </main>
+    <main id="workstage"></main>
 
-    <!-- Ghost Mode PIN Overlay -->
-    <div id="lockScreen" class="overlay" style="display: flex;">
+    <div id="lockScreen" class="overlay">
         <div class="glass-card">
             <h1>SYSTEM LOCKED</h1>
             <input type="password" id="pinInput" placeholder="Enter PIN">

@@ -1,18 +1,18 @@
-// --- DEFAULTS & STORAGE ---
+// 1. LOAD CONFIG & UI
 let config = JSON.parse(localStorage.getItem('sysConfig')) || {
-    pin: "1234",
+    pin: "1234", // Default PIN
     panicKey: "Escape",
-    panicUrl: "https://google.com",
+    panicUrl: "https://classroom.google.com",
     tabTitle: "Google Drive",
     tabIcon: "https://ssl.gstatic.com",
-    idleTime: 5 // Minutes
+    idleTime: 5
 };
 
-// --- INITIALIZE UI ---
+// Apply Cloak immediately on load
 document.getElementById('tabTitle').innerText = config.tabTitle;
 document.getElementById('tabIcon').href = config.tabIcon;
 
-// --- GHOST MODE (INACTIVITY) ---
+// 2. GHOST MODE (INACTIVITY)
 let idleTimer;
 function resetIdleTimer() {
     clearTimeout(idleTimer);
@@ -20,43 +20,55 @@ function resetIdleTimer() {
         document.getElementById('lockScreen').style.display = "flex";
     }, config.idleTime * 60 * 1000);
 }
+// Start the timer
+resetIdleTimer();
 
+// 3. PIN CHECK
 function checkPin() {
-    if (document.getElementById('pinInput').value === config.pin) {
+    const input = document.getElementById('pinInput').value;
+    if (input === config.pin) {
         document.getElementById('lockScreen').style.display = "none";
         resetIdleTimer();
-    } else { alert("ACCESS DENIED"); }
+    } else {
+        alert("ACCESS DENIED");
+    }
 }
 
-// --- WINDOW MANAGER ---
+// 4. WINDOW MANAGER (Sidebar Switching)
 function openWindow(type) {
     const stage = document.getElementById('workstage');
-    stage.innerHTML = ''; // Clear previous window
+    stage.innerHTML = ''; 
     
-    let html = '';
     if (type === 'unblock') {
-        html = `
+        stage.innerHTML = `
             <div class="window">
-                <h2>DuckDuckGo Unblocker</h2>
-                <input type="text" id="proxyInput" placeholder="Search or URL...">
-                <button class="yellow-btn" onclick="launchProxy()">PROXY LAUNCH</button>
+                <h2>Proxy Unblocker</h2>
+                <input type="text" id="proxyInput" placeholder="Search DuckDuckGo or enter URL...">
+                <button class="yellow-btn" onclick="launchProxy()">LAUNCH</button>
+            </div>`;
+    } else if (type === 'embedder') {
+        stage.innerHTML = `
+            <div class="window">
+                <h2>about:blank Embedder</h2>
+                <input type="text" id="embedInput" placeholder="https://example.com">
+                <button class="yellow-btn" onclick="launchEmbed()">EMBED</button>
             </div>`;
     } else if (type === 'settings') {
-        html = `
-            <div class="window" style="width: 600px;">
-                <h2>System Settings</h2>
-                <label>PIN Code</label><input type="text" id="s_pin" value="${config.pin}">
+        stage.innerHTML = `
+            <div class="window" style="width: 500px;">
+                <h2>Settings</h2>
+                <label>System PIN</label><input type="text" id="s_pin" value="${config.pin}">
                 <label>Panic Key</label><input type="text" id="s_key" value="${config.panicKey}">
                 <label>Panic Redirect URL</label><input type="text" id="s_purl" value="${config.panicUrl}">
                 <label>Tab Title</label><input type="text" id="s_title" value="${config.tabTitle}">
-                <label>Tab Icon (Link)</label><input type="text" id="s_icon" value="${config.tabIcon}">
-                <label>Ghost Mode (Mins)</label><input type="number" id="s_idle" value="${config.idleTime}">
-                <button class="yellow-btn" onclick="saveSettings()">APPLY & SAVE</button>
+                <label>Tab Icon (URL)</label><input type="text" id="s_icon" value="${config.tabIcon}">
+                <label>Ghost Mode (Minutes)</label><input type="number" id="s_idle" value="${config.idleTime}">
+                <button class="yellow-btn" onclick="saveSettings()">SAVE & APPLY</button>
             </div>`;
     }
-    stage.innerHTML = html;
 }
 
+// 5. SETTINGS PERSISTENCE
 function saveSettings() {
     config.pin = document.getElementById('s_pin').value;
     config.panicKey = document.getElementById('s_key').value;
@@ -66,30 +78,36 @@ function saveSettings() {
     config.idleTime = parseInt(document.getElementById('s_idle').value);
     
     localStorage.setItem('sysConfig', JSON.stringify(config));
-    location.reload(); // Refresh to apply tab changes
+    alert("Settings Saved! Refreshing...");
+    location.reload(); 
 }
 
-// --- DUCKDUCKGO & UV LAUNCHER ---
+// 6. PROXY & EMBED LOGIC
 async function launchProxy() {
-    let query = document.getElementById('proxyInput').value;
-    let url = query;
+    let input = document.getElementById('proxyInput').value;
+    let url = input;
 
-    // Search Engine Logic
-    if (!query.includes('.') || query.includes(' ')) {
-        url = "https://duckduckgo.com" + encodeURIComponent(query);
-    } else if (!query.startsWith('http')) {
-        url = "https://" + query;
-    }
-
-    if ('serviceWorker' in navigator) {
-        await navigator.serviceWorker.register('/uv/sw.js', { scope: __uv$config.prefix });
+    if (!input.includes('.') || input.includes(' ')) {
+        url = "https://duckduckgo.com/?q=" + encodeURIComponent(input);
+    } else if (!input.startsWith('http')) {
+        url = "https://" + input;
     }
 
     const win = window.open('about:blank', '_blank');
-    const encoded = window.location.origin + __uv$config.prefix + __uv$config.encodeUrl(url);
-    
-    win.document.body.innerHTML = `<iframe src="${encoded}" style="position:fixed;top:0;left:0;width:100%;height:100%;border:none;margin:0;padding:0;"></iframe>`;
+    const encoded = window.location.origin + "/uv/service/" + btoa(url); // Simple UV b64 encode for test
+    win.document.body.innerHTML = `<iframe src="${encoded}" style="position:fixed;inset:0;width:100%;height:100%;border:none;"></iframe>`;
 }
 
-// --- PANIC KEY ---
-window.onkeydown = (e) => { if (e.key === config.panicKey) window.location.href = config.panicUrl; };
+async function launchEmbed() {
+    const url = document.getElementById('embedInput').value;
+    const win = window.open('about:blank', '_blank');
+    win.document.body.innerHTML = `<iframe src="${url}" style="position:fixed;inset:0;width:100%;height:100%;border:none;"></iframe>`;
+}
+
+// 7. PANIC KEY
+window.onkeydown = (e) => { 
+    if (e.key === config.panicKey) window.location.href = config.panicUrl; 
+};
+
+// Open Proxy by default
+openWindow('unblock');

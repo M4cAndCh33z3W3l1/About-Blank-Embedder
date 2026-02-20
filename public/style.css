@@ -1,30 +1,19 @@
-:root { --yellow: #ffff00; --glass: rgba(255, 255, 255, 0.05); --side: #0a0a0a; }
-body { background: #000; height: 100vh; display: flex; overflow: hidden; font-family: sans-serif; }
-
-/* Sidebar */
 .sidebar {
-    width: 80px; background: var(--side); display: flex; flex-direction: column;
-    align-items: center; padding-top: 20px; border-right: 1px solid #222; z-index: 10;
+    width: 85px; background: #0a0a0a; display: flex; 
+    flex-direction: column; align-items: center; 
+    padding-top: 25px; border-right: 1px solid #222; z-index: 10;
 }
 .nav-item { 
-    color: #555; font-size: 24px; margin-bottom: 30px; cursor: pointer; 
-    display: flex; flex-direction: column; align-items: center; transition: 0.3s;
+    margin-bottom: 35px; cursor: pointer; text-align: center;
+    transition: 0.3s; width: 100%;
 }
-.nav-item span { font-size: 10px; margin-top: 5px; text-transform: uppercase; }
-.nav-item:hover { color: var(--yellow); }
-
-/* Workstage & Windows */
-#workstage { flex: 1; position: relative; display: flex; justify-content: center; align-items: center; }
-
-.window {
-    position: absolute; background: var(--glass); backdrop-filter: blur(15px);
-    border: 1px solid rgba(255,255,255,0.1); border-radius: 15px;
-    width: 500px; padding: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-    animation: fadeIn 0.3s ease;
+.nav-item img { 
+    width: 32px; height: 32px; filter: grayscale(100%); 
+    transition: 0.3s; margin-bottom: 5px;
 }
-@keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-
-/* Shared Elements */
-.yellow-btn { width: 100%; padding: 12px; background: var(--yellow); border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; }
-input { width: 100%; padding: 12px; background: #111; border: 1px solid #333; color: white; border-radius: 8px; margin-bottom: 10px; }
-.overlay { position: fixed; inset: 0; background: #000; z-index: 1000; display: flex; justify-content: center; align-items: center; }
+.nav-item:hover img { filter: grayscale(0%); transform: scale(1.1); }
+.nav-item span { 
+    display: block; font-size: 9px; color: #555; 
+    text-transform: uppercase; font-weight: bold;
+}
+.nav-item:hover span { color: #ffff00; }
