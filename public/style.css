@@ -1,175 +1,53 @@
-/* 1. Reset & Global Styles */
-* { margin: 0; padding: 0; box-sizing: border-box; }
+:root { --yellow: #ffff00; --panel: rgba(10, 10, 10, 0.9); }
+* { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+body { background: #000; height: 100vh; width: 100vw; overflow: hidden; font-family: 'Segoe UI', sans-serif; display: flex; }
 
-body {
-    background: #000;
-    color: white;
-    font-family: 'Segoe UI', sans-serif;
-    height: 100vh;
-    width: 100vw;
-    display: flex; /* This aligns the sidebar and main content side-by-side */
-    overflow: hidden;
-}
-
-/* 2. Sidebar Fix */
+/* The "L" Connection */
 .sidebar {
-    width: 90px;
-    height: 100vh;
-    background: #0a0a0a;
-    border-right: 1px solid #222;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 20px;
-    z-index: 100;
+    width: 70px; height: calc(100vh - 50px); background: var(--panel);
+    display: flex; flex-direction: column; align-items: center; padding-top: 20px;
+    border-right: 1px solid #222; z-index: 100;
 }
 
-.nav-item {
-    margin-bottom: 30px;
-    cursor: pointer;
-    text-align: center;
-    width: 100%;
+#toolbar {
+    position: fixed; bottom: 0; left: 0; width: 100vw; height: 50px;
+    background: var(--panel); border-top: 1px solid #222;
+    display: flex; align-items: center; z-index: 101;
 }
 
-.nav-item img {
-    width: 35px;
-    height: 35px;
-    filter: invert(1); /* Makes black icons white so you can see them */
-    transition: 0.3s;
+/* Bare Icons - No Rings */
+.nav-item { margin-bottom: 25px; cursor: pointer; transition: 0.3s; }
+.nav-item img { width: 28px; height: 28px; filter: grayscale(1); opacity: 0.6; }
+.nav-item:hover img { filter: grayscale(0) drop-shadow(0 0 8px var(--yellow)); opacity: 1; transform: scale(1.1); }
+
+/* Start Corner (Where L meets) */
+#start-corner {
+    width: 70px; height: 50px; background: #151515; border-right: 1px solid #222;
+    display: flex; justify-content: center; align-items: center; cursor: pointer;
 }
+#live-time { font-family: 'Orbitron'; font-size: 10px; color: var(--yellow); text-shadow: 0 0 5px var(--yellow); }
 
-.nav-item span {
-    display: block;
-    font-size: 10px;
-    color: #666;
-    margin-top: 5px;
-    text-transform: uppercase;
-}
+/* Taskbar Icons */
+#taskbar-icons { flex: 1; display: flex; padding-left: 15px; gap: 10px; }
+.task-icon { width: 30px; height: 30px; cursor: pointer; transition: 0.2s; }
 
-.nav-item:hover img { transform: scale(1.1); filter: invert(1) sepia(1) saturate(100) hue-rotate(20deg); }
-
-/* 3. Main Workstage (Where windows appear) */
-#workstage {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-}
-
-/* 4. Glassmorphism Window Fix */
+/* Resizable Spacy Windows */
 .window {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    padding: 40px;
-    width: 450px;
-    text-align: center;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-}
-
-/* 5. Inputs & Buttons */
-input {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    background: rgba(0,0,0,0.5);
-    border: 1px solid #333;
-    border-radius: 8px;
-    color: #ffff00;
-    outline: none;
-}
-
-.yellow-btn {
-    width: 100%;
-    padding: 12px;
-    background: #ffff00;
-    color: black;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-/* 6. Lock Screen Overlay */
-.overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: #000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-.window-header {
-    background: rgba(255,255,255,0.1);
-    padding: 10px 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: move;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-}
-
-.window-controls span {
-    margin-left: 10px;
-    cursor: pointer;
-    font-family: monospace;
-    font-size: 18px;
-    opacity: 0.6;
-}
-
-.window-controls span:hover { opacity: 1; }
-
-.fullscreen {
-    width: 90vw !important;
-    height: 80vh !important;
-    top: 5vh !important;
-    left: 5vw !important;
-}
-
-.minimized .window-body { display: none; }
-.minimized { height: 45px !important; }
-/* Taskbar Logic */
-#taskbar {
-    position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
-    height: 60px; background: rgba(10, 10, 10, 0.8);
+    position: absolute; background: rgba(15, 15, 15, 0.85); 
     backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 20px; display: flex; align-items: center; padding: 0 15px; gap: 15px; z-index: 200;
+    border-radius: 12px; min-width: 300px; min-height: 200px;
+    resize: both; overflow: hidden; /* This makes it resizable */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 10;
 }
 
-.task-item img { width: 35px; cursor: pointer; transition: 0.3s; filter: drop-shadow(0 0 5px rgba(255,255,0,0.2)); }
-.task-item:hover img { transform: translateY(-5px) scale(1.1); filter: drop-shadow(0 0 10px #ffff00); }
-
-/* Spacy Typography & Glow */
-h2 { font-family: 'Orbitron', sans-serif; letter-spacing: 4px; color: #fff; text-shadow: 0 0 15px #ffff00; margin-bottom: 20px; }
-
-.yellow-btn.glow { box-shadow: 0 0 20px rgba(255, 255, 0, 0.4); text-transform: uppercase; letter-spacing: 2px; }
-
-/* Mac-style Window Controls */
-.window-controls { display: flex; gap: 8px; }
-.ctrl { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; }
-.close { background: #ff5f56; }
-.min { background: #ffbd2e; }
-.max { background: #27c93f; }
-
-/* Pop Animation */
-.animate-pop { animation: pop 0.25s cubic-bezier(0.2, 1, 0.2, 1); }
-@keyframes pop { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
-h1, h2, .glow-text {
-    font-family: 'Orbitron', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 5px;
-    color: #fff;
-    text-shadow: 0 0 15px #ffff00; /* This creates the yellow glow */
+.window-header { 
+    background: rgba(255,255,255,0.05); padding: 8px 12px; 
+    display: flex; justify-content: space-between; cursor: move; 
 }
+.window-body { padding: 20px; color: #fff; }
+h2 { font-family: 'Orbitron'; font-size: 0.9rem; letter-spacing: 2px; color: var(--yellow); margin-bottom: 15px; }
 
-.yellow-btn.glow {
-    box-shadow: 0 0 15px rgba(255, 255, 0, 0.4);
-    font-family: 'Orbitron', sans-serif;
-}
+/* Window Controls (Mac Style) */
+.ctrls { display: flex; gap: 6px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; cursor: pointer; }
+.dot.red { background: #ff5f56; } .dot.yel { background: #ffbd2e; } .dot.grn { background: #27c93f; }
