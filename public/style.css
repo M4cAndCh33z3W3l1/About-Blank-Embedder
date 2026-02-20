@@ -1,53 +1,60 @@
-:root { --yellow: #ffff00; --panel: rgba(10, 10, 10, 0.9); }
-* { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
-body { background: #000; height: 100vh; width: 100vw; overflow: hidden; font-family: 'Segoe UI', sans-serif; display: flex; }
+:root { --glow: #ffff00; --bg: #050505; --panel: rgba(15, 15, 15, 0.9); }
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Orbitron', sans-serif; }
 
-/* The "L" Connection */
+body { background: var(--bg); height: 100vh; overflow: hidden; display: flex; color: white; }
+
+/* The "L" Bar Layout */
 .sidebar {
     width: 70px; height: calc(100vh - 50px); background: var(--panel);
-    display: flex; flex-direction: column; align-items: center; padding-top: 20px;
-    border-right: 1px solid #222; z-index: 100;
+    border-right: 1px solid #222; display: flex; flex-direction: column; align-items: center; padding-top: 20px; z-index: 100;
 }
 
 #toolbar {
     position: fixed; bottom: 0; left: 0; width: 100vw; height: 50px;
-    background: var(--panel); border-top: 1px solid #222;
-    display: flex; align-items: center; z-index: 101;
+    background: var(--panel); border-top: 1px solid #222; display: flex; align-items: center; z-index: 101;
 }
 
-/* Bare Icons - No Rings */
-.nav-item { margin-bottom: 25px; cursor: pointer; transition: 0.3s; }
-.nav-item img { width: 28px; height: 28px; filter: grayscale(1); opacity: 0.6; }
-.nav-item:hover img { filter: grayscale(0) drop-shadow(0 0 8px var(--yellow)); opacity: 1; transform: scale(1.1); }
-
-/* Start Corner (Where L meets) */
 #start-corner {
-    width: 70px; height: 50px; background: #151515; border-right: 1px solid #222;
-    display: flex; justify-content: center; align-items: center; cursor: pointer;
+    width: 70px; height: 50px; background: #111; border-right: 1px solid #222;
+    display: flex; justify-content: center; align-items: center; color: var(--glow); font-size: 10px;
 }
-#live-time { font-family: 'Orbitron'; font-size: 10px; color: var(--yellow); text-shadow: 0 0 5px var(--yellow); }
 
-/* Taskbar Icons */
-#taskbar-icons { flex: 1; display: flex; padding-left: 15px; gap: 10px; }
-.task-icon { width: 30px; height: 30px; cursor: pointer; transition: 0.2s; }
+/* Icon Fixes */
+.nav-item { margin-bottom: 30px; cursor: pointer; transition: 0.3s; }
+.nav-item img, .task-icon { 
+    width: 30px; height: 30px; 
+    filter: brightness(0) invert(1) drop-shadow(0 0 5px var(--glow)); /* Forces them to show up */
+}
+.nav-item:hover img { transform: scale(1.2); filter: brightness(1) drop-shadow(0 0 10px var(--glow)); }
 
-/* Resizable Spacy Windows */
+/* Futuristic Window Styling */
 .window {
-    position: absolute; background: rgba(15, 15, 15, 0.85); 
-    backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 12px; min-width: 300px; min-height: 200px;
-    resize: both; overflow: hidden; /* This makes it resizable */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 10;
+    position: absolute; background: rgba(10, 10, 10, 0.85); 
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.9); min-width: 350px; overflow: hidden;
 }
 
 .window-header { 
-    background: rgba(255,255,255,0.05); padding: 8px 12px; 
-    display: flex; justify-content: space-between; cursor: move; 
+    background: rgba(255,255,255,0.05); padding: 10px; 
+    display: flex; justify-content: space-between; align-items: center; cursor: move;
 }
-.window-body { padding: 20px; color: #fff; }
-h2 { font-family: 'Orbitron'; font-size: 0.9rem; letter-spacing: 2px; color: var(--yellow); margin-bottom: 15px; }
 
-/* Window Controls (Mac Style) */
-.ctrls { display: flex; gap: 6px; }
-.dot { width: 10px; height: 10px; border-radius: 50%; cursor: pointer; }
-.dot.red { background: #ff5f56; } .dot.yel { background: #ffbd2e; } .dot.grn { background: #27c93f; }
+.window-body { padding: 25px; }
+
+/* Inputs & Buttons */
+input { 
+    width: 100%; padding: 12px; background: #000; border: 1px solid #333; 
+    color: var(--glow); border-radius: 5px; margin-bottom: 10px; outline: none;
+}
+input:focus { border-color: var(--glow); box-shadow: 0 0 10px rgba(255,255,0,0.2); }
+
+.yellow-btn { 
+    width: 100%; padding: 12px; background: var(--glow); color: #000; 
+    font-weight: 900; border: none; border-radius: 5px; cursor: pointer; text-transform: uppercase;
+}
+
+/* Scrollbar for Settings */
+.settings-scroll { max-height: 300px; overflow-y: auto; padding-right: 10px; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
