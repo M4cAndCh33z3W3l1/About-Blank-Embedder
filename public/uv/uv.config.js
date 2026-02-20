@@ -1,6 +1,6 @@
 self.__uv$config = {
     prefix: '/uv/service/',
-    bare: 'https://uv.benropro.me', // Use a public bare server
+    bare: 'https://uv.benropro.me', // If iBoss blocks this, try https://t-8-0-2.p-3-1-0.xyz
     encodeUrl: Ultraviolet.codec.xor.encode,
     decodeUrl: Ultraviolet.codec.xor.decode,
     handler: '/uv/uv.handler.js',

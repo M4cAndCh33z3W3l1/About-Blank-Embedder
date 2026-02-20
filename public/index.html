@@ -3,24 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>about:blank Embedder</title>
+    <title>Google Drive</title> <!-- Tab Ghosting Initial Title -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="aurora"></div>
-    <div class="star-field"></div>
-    <!-- Multiple shooting stars for variety -->
-    <div class="shooting-star"></div>
-    <div class="shooting-star"></div>
-    <div class="shooting-star"></div>
-    
-    <div class="glass-card">
-        <h1>about:blank Embedder</h1>
-        <p>Enter a destination to embed.</p>
-        <input type="text" id="urlInput" placeholder="https://example.com" value="https://">
-        <button onclick="launchBlank()">Launch Embed</button>
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="shooting-stars"></div>
+
+    <!-- PIN Screen -->
+    <div id="pinOverlay" class="overlay">
+        <div class="glass-card animate-up">
+            <h1 class="typing">Authentication Required</h1>
+            <div class="input-wrapper">
+                <input type="password" id="pinInput" placeholder="Enter Security PIN" autocomplete="off">
+                <div class="underline"></div>
+            </div>
+            <button onclick="checkPin()">Access System</button>
+        </div>
     </div>
 
+    <!-- Main Content -->
+    <div id="mainContent" style="display: none;">
+        <div class="glass-card">
+            <h1>Embedder</h1>
+            <p>Traffic is encrypted via UV Service Worker</p>
+            <input type="text" id="urlInput" placeholder="https://duckduckgo.com" value="https://">
+            <button onclick="launchBlank()">Secure Launch</button>
+        </div>
+    </div>
+
+    <!-- Ultraviolet Scripts -->
+    <script src="/uv/uv.bundle.js"></script>
+    <script src="/uv/uv.config.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
