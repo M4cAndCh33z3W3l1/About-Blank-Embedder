@@ -3,37 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Drive</title> <!-- Tab Ghosting Initial Title -->
+    <title>Google Drive</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="stars"></div>
-    <div class="stars2"></div>
-    <div class="shooting-stars"></div>
+    <div class="stars-container">
+        <div class="stars"></div>
+        <div class="stars2"></div>
+        <div class="shooting-stars"></div>
+    </div>
 
     <!-- PIN Screen -->
-    <div id="pinOverlay" class="overlay">
-        <div class="glass-card animate-up">
-            <h1 class="typing">Authentication Required</h1>
-            <div class="input-wrapper">
-                <input type="password" id="pinInput" placeholder="Enter Security PIN" autocomplete="off">
-                <div class="underline"></div>
+    <div id="pinOverlay" class="full-center">
+        <div class="glass-card slide-up">
+            <h1 class="glow-text">SYSTEM LOCKED</h1>
+            <div class="input-group">
+                <input type="password" id="pinInput" placeholder="ENTER PIN" autocomplete="off">
             </div>
-            <button onclick="checkPin()">Access System</button>
+            <button class="yellow-btn" onclick="checkPin()">AUTHORIZE</button>
         </div>
     </div>
 
     <!-- Main Content -->
-    <div id="mainContent" style="display: none;">
+    <div id="mainContent" class="full-center" style="display: none;">
+        <button class="settings-icon" onclick="toggleSettings()">⚙️</button>
         <div class="glass-card">
-            <h1>Embedder</h1>
-            <p>Traffic is encrypted via UV Service Worker</p>
-            <input type="text" id="urlInput" placeholder="https://duckduckgo.com" value="https://">
-            <button onclick="launchBlank()">Secure Launch</button>
+            <h1>EMBEDDER</h1>
+            <div class="input-group">
+                <input type="text" id="urlInput" placeholder="https://..." value="https://">
+            </div>
+            <button class="yellow-btn" onclick="launchBlank()">SECURE LAUNCH</button>
         </div>
     </div>
 
-    <!-- Ultraviolet Scripts -->
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal-overlay" style="display: none;">
+        <div class="glass-card settings-card">
+            <h2>SETTINGS</h2>
+            <div class="setting-item">
+                <label>Emergency Key:</label>
+                <input type="text" id="panicKeyInput" placeholder="e.g. Escape" maxlength="10">
+            </div>
+            <div class="setting-item">
+                <label>Fake Tab Title:</label>
+                <input type="text" id="fakeTitleInput" placeholder="Google Drive">
+            </div>
+            <button class="yellow-btn" onclick="saveSettings()">SAVE</button>
+            <button class="close-text" onclick="toggleSettings()">Close</button>
+        </div>
+    </div>
+
     <script src="/uv/uv.bundle.js"></script>
     <script src="/uv/uv.config.js"></script>
     <script src="main.js"></script>

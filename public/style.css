@@ -1,61 +1,56 @@
-body, html {
-    margin: 0; padding: 0;
-    background: #000;
-    height: 100vh;
-    font-family: 'Courier New', Courier, monospace;
-    overflow: hidden;
-    color: white;
+:root { --yellow: #ffff00; --glass: rgba(255, 255, 255, 0.05); }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: #000; height: 100vh; width: 100vw;
+    display: flex; justify-content: center; align-items: center;
+    overflow: hidden; font-family: 'Segoe UI', sans-serif; color: #fff;
 }
 
-/* Deep Space Stars */
-.stars, .stars2 {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: transparent url('https://s3-us-west-2.amazonaws.com') repeat;
-}
-.stars { animation: move-stars 200s linear infinite; opacity: 0.5; }
-.stars2 { animation: move-stars 100s linear infinite; opacity: 0.3; background-size: 50%; }
-
-@keyframes move-stars {
-    from { background-position: 0 0; }
-    to { background-position: 10000px 5000px; }
+.full-center {
+    position: absolute; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
 }
 
-/* Glassmorphism & Animations */
-.overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    display: flex; justify-content: center; align-items: center; background: #000; z-index: 100;
-}
-
-.animate-up {
-    animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-@keyframes slideUp {
-    from { transform: translateY(50px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
-
+/* Glassmorphism Fixes */
 .glass-card {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: var(--glass);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 40px; border-radius: 20px; text-align: center; width: 350px;
+    padding: 2.5rem; border-radius: 20px;
+    width: 380px; text-align: center;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    z-index: 10;
 }
 
-/* Yellow Accent for interactive elements */
+.input-group { margin: 20px 0; width: 100%; }
+
 input {
-    width: 100%; padding: 10px; background: transparent; border: none;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.2); color: #ffff00;
-    text-align: center; font-size: 1.2rem; outline: none; transition: 0.3s;
+    width: 100%; padding: 12px; background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px;
+    color: var(--yellow); text-align: center; font-size: 1rem; outline: none;
 }
 
-input:focus { border-bottom: 2px solid #ffff00; }
+input:focus { border-color: var(--yellow); box-shadow: 0 0 10px rgba(255, 255, 0, 0.2); }
 
-button {
-    margin-top: 25px; width: 100%; padding: 12px;
-    background: #ffff00; color: black; border: none;
-    border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s;
+.yellow-btn {
+    width: 100%; padding: 12px; background: var(--yellow);
+    color: #000; border: none; border-radius: 8px;
+    font-weight: 800; cursor: pointer; transition: 0.2s;
 }
 
-button:hover { background: #d4d400; transform: scale(1.05); }
+.yellow-btn:hover { transform: scale(1.03); background: #e6e600; }
+
+/* Stars & Space */
+.stars-container { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+.stars { position: absolute; inset: 0; background: url('https://s3-us-west-2.amazonaws.com') repeat; animation: move 200s linear infinite; opacity: 0.4; }
+
+@keyframes move { from { background-position: 0 0; } to { background-position: 10000px 5000px; } }
+
+/* Settings Styles */
+.settings-icon { position: fixed; top: 20px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; opacity: 0.5; }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 100; }
+.setting-item { text-align: left; margin-bottom: 15px; }
+.setting-item label { display: block; font-size: 0.8rem; color: #aaa; margin-bottom: 5px; }
+.close-text { background: none; border: none; color: #555; margin-top: 15px; cursor: pointer; width: 100%; }

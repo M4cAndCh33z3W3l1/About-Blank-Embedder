@@ -1,55 +1,53 @@
-// --- CONFIGURATION ---
+// --- CONFIG ---
 const MY_PIN = "1234"; // PUT YOUR PIN HERE
-const GHOST_TITLE = "Google Drive"; 
-const PAGE_TITLE = "My Workspace";
 
-// --- TAB GHOSTING ---
-window.onblur = () => document.title = GHOST_TITLE;
-window.onfocus = () => document.title = PAGE_TITLE;
+// --- SETTINGS LOGIC ---
+let settings = JSON.parse(localStorage.getItem('userSettings')) || {
+    panicKey: 'Escape',
+    fakeTitle: 'Google Drive'
+};
+
+function saveSettings() {
+    settings.panicKey = document.getElementById('panicKeyInput').value || 'Escape';
+    settings.fakeTitle = document.getElementById('fakeTitleInput').value || 'Google Drive';
+    localStorage.setItem('userSettings', JSON.stringify(settings));
+    alert("Settings Saved!");
+    toggleSettings();
+}
+
+function toggleSettings() {
+    const modal = document.getElementById('settingsModal');
+    modal.style.display = modal.style.display === 'none' ? 'flex' : 'none';
+}
+
+// --- PANIC KEY ---
+window.addEventListener('keydown', (e) => {
+    if (e.key === settings.panicKey) window.location.href = "https://google.com";
+});
 
 // --- PIN CHECK ---
 function checkPin() {
-    const val = document.getElementById('pinInput').value;
-    if (val === MY_PIN) {
-        document.getElementById('pinOverlay').style.opacity = "0";
-        setTimeout(() => {
-            document.getElementById('pinOverlay').style.display = "none";
-            document.getElementById('mainContent').style.display = "block";
-        }, 500);
-    } else {
-        alert("Access Denied");
-    }
+    if (document.getElementById('pinInput').value === MY_PIN) {
+        document.getElementById('pinOverlay').style.display = "none";
+        document.getElementById('mainContent').style.display = "flex";
+    } else { alert("ACCESS DENIED"); }
 }
 
-// --- SECURE LAUNCH (ULTRAVIOLET) ---
+// --- LAUNCHER ---
 async function launchBlank() {
     const url = document.getElementById('urlInput').value;
+    if (!url.startsWith('http')) return alert("Use https://");
 
-    // Register Service Worker (Required for iBoss bypass)
     if ('serviceWorker' in navigator) {
-        await navigator.serviceWorker.register('/uv/sw.js', {
-            scope: __uv$config.prefix
-        });
+        await navigator.serviceWorker.register('/uv/sw.js', { scope: __uv$config.prefix });
     }
 
     const win = window.open('about:blank', '_blank');
-    if (!win) return alert("Pop-up blocked!");
+    if (!win) return alert("Pop-up Blocked!");
 
-    // Rewrite the URL using UV to bypass iBoss/Refused-to-connect
-    const encodedUrl = window.location.origin + __uv$config.prefix + __uv$config.encodeUrl(url);
-
+    const encoded = window.location.origin + __uv$config.prefix + __uv$config.encodeUrl(url);
     const doc = win.document;
-    const iframe = doc.createElement('iframe');
-
-    doc.title = GHOST_TITLE; // Cloak the new tab too
-    doc.body.style.margin = '0';
-    doc.body.style.height = '100vh';
-    doc.body.style.overflow = 'hidden';
-
-    iframe.style.width = '100%';
-    iframe.style.height = '100%';
-    iframe.style.border = 'none';
-    iframe.src = encodedUrl;
-
-    doc.body.appendChild(iframe);
+    
+    doc.title = settings.fakeTitle;
+    doc.body.innerHTML = `<iframe src="${encoded}" style="position:fixed;top:0;left:0;width:100%;height:100%;border:none;margin:0;padding:0;overflow:hidden;"></iframe>`;
 }
